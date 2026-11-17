@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Твики ГУ Mazda MZD Connect — Полный гайд</title>
+  <meta name="description" content="Систематизированная информация по установке и изменению твиков головного устройства Mazda MZD Connect: прошивки, MZD-AIO-TI, разблокировка на 70/74 версиях, список твиков, риски.">
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card: #1a2332;
+      --accent: #e63946;
+      --accent2: #457b9d;
+      --text: #e8eef4;
+      --muted: #8b9bb4;
+      --border: #2a3548;
+      --success: #2a9d8f;
+      --warning: #e9c46a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 0 0 4rem;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1a2332 0%, #0f1419 60%, #1a0a0a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 1.5rem 2.5rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+    .hero p {
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+      font-size: 1.05rem;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(230, 57, 70, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(230, 57, 70, 0.4);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 0.2rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(15, 20, 25, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 0.75rem 0;
+    }
+    nav .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--accent); }
+    section {
+      margin: 2.75rem 0;
+    }
+    h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+    }
+    h3 {
+      font-size: 1.15rem;
+      margin: 1.5rem 0 0.6rem;
+      color: var(--accent2);
+    }
+    p, li { margin-bottom: 0.7rem; }
+    ul, ol { padding-left: 1.4rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.4rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.4rem;
+      margin: 1rem 0;
+    }
+    .card.warn {
+      border-color: rgba(233, 196, 106, 0.45);
+      background: rgba(233, 196, 106, 0.06);
+    }
+    .card.danger {
+      border-color: rgba(230, 57, 70, 0.5);
+      background: rgba(230, 57, 70, 0.07);
+    }
+    .card.success {
+      border-color: rgba(42, 157, 143, 0.45);
+      background: rgba(42, 157, 143, 0.06);
+    }
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+    }
+    th {
+      background: rgba(69, 123, 157, 0.2);
+      color: var(--accent2);
+      font-weight: 600;
+    }
+    tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+    code, .mono {
+      font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+      background: rgba(0,0,0,0.35);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+    pre {
+      background: #0a0e14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      margin: 0.8rem 0;
+    }
+    a { color: #7eb8da; }
+    a:hover { color: #a8d4f0; }
+    .toc {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border);
+    }
+    .toc ol { margin: 0; }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(69, 123, 157, 0.25);
+      color: var(--accent2);
+      margin-right: 0.3rem;
+    }
+    .tag.ok { background: rgba(42, 157, 143, 0.25); color: var(--success); }
+    .tag.warn { background: rgba(233, 196, 106, 0.2); color: var(--warning); }
+    .tag.bad { background: rgba(230, 57, 70, 0.2); color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <h1>Твики ГУ Mazda MZD Connect</h1>
+      <p>Систематизированный сборник по установке, изменению и разблокировке твиков головного устройства Mazda (CMU / MZD Connect). Готово для GitHub Pages.</p>
+      <div>
+        <span class="badge">MZD-AIO-TI</span>
+        <span class="badge">FW 55–74</span>
+        <span class="badge">Mazda 3 / 6 / CX-5 / CX-3 / MX-5</span>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="container">
+      <a href="#what">Что это</a>
+      <a href="#compat">Совместимость</a>
+      <a href="#tools">Инструменты</a>
+      <a href="#fw">Прошивки</a>
+      <a href="#install">Установка</a>
+      <a href="#fw74">Разблокировка 74</a>
+      <a href="#tweaks">Список твиков</a>
+      <a href="#aa">Android Auto / CarPlay</a>
+      <a href="#risks">Риски</a>
+      <a href="#links">Ссылки</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="toc">
+      <strong>Содержание</strong>
+      <ol>
+        <li><a href="#what">Что такое твики ГУ Mazda</a></li>
+        <li><a href="#compat">Совместимые модели и прошивки</a></li>
+        <li><a href="#tools">Основные инструменты</a></li>
+        <li><a href="#fw">Обновление прошивки</a></li>
+        <li><a href="#install">Установка твиков (общий порядок)</a></li>
+        <li><a href="#fw70">Особенности FW 70</a></li>
+        <li><a href="#fw74">Разблокировка и твики на FW 74</a></li>
+        <li><a href="#tweaks">Каталог популярных твиков</a></li>
+        <li><a href="#aa">Android Auto и Apple CarPlay</a></li>
+        <li><a href="#risks">Риски, бэкапы и восстановление</a></li>
+        <li><a href="#links">Полезные ссылки</a></li>
+      </ol>
+    </div>
+
+    <section id="what">
+      <h2>1. Что такое твики ГУ Mazda</h2>
+      <p><strong>Твики (tweaks)</strong> — это программные модификации мультимедийной системы <strong>MZD Connect</strong> (головное устройство / CMU). Они позволяют:</p>
+      <ul>
+        <li>Включать тачскрин во время движения</li>
+        <li>Убирать предупреждения (disclaimer, камера заднего вида)</li>
+        <li>Менять фон, цвета, раскладку меню, статусбар</li>
+        <li>Добавлять приложения: цифровой спидометр, видеоплеер, экспериментальный Android Auto</li>
+        <li>Включать SSH, Wi-Fi, ускорять интерфейс, добавлять дату в статусбар и многое другое</li>
+      </ul>
+      <p>Основной инструмент сообщества — <strong>MZD-AIO-TI</strong> (All-In-One Tweaks Installer). Это десктоп-приложение, которое собирает выбранные твики в пакет для USB-флешки.</p>
+      <div class="card warn">
+        <strong>Важно:</strong> все действия выполняются на свой страх и риск. Можно получить «кирпич», bootloop, потерю гарантии или проблемы с беспроводным CarPlay на некоторых версиях 74.xx.
+      </div>
+    </section>
+
+    <section id="compat">
+      <h2>2. Совместимые модели и прошивки</h2>
+      <h3>Модели с MZD Connect (Gen 6 / CMU150 и аналоги)</h3>
+      <ul>
+        <li>Mazda 2 (DJ)</li>
+        <li>Mazda 3 (BM / BN, ~2014–2018)</li>
+        <li>Mazda 6 (GJ / GL)</li>
+        <li>CX-3 (DK)</li>
+        <li>CX-5 (KE / ранние KF)</li>
+        <li>CX-9 (TC)</li>
+        <li>MX-5 / Roadster (ND)</li>
+      </ul>
+      <h3>Поддержка прошивок в AIO</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Версия FW</th>
+            <th>Установка твиков</th>
+            <th>Комментарий</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>v55 / v56 / v58 / v59 (до 59.00.502)</td>
+            <td><span class="tag ok">Просто</span></td>
+            <td>Стандартная установка с USB через AIO</td>
+          </tr>
+          <tr>
+            <td>v59.00.502+</td>
+            <td><span class="tag warn">Нужна подготовка</span></td>
+            <td>Нужен SSH_bringback / ID7 Recovery или serial</td>
+          </tr>
+          <tr>
+            <td>v70.xx</td>
+            <td><span class="tag warn">Сложно</span></td>
+            <td>ID7 Recovery Scripts или serial-подключение; 70.00.100 часто рекомендуют как базу</td>
+          </tr>
+          <tr>
+            <td>v74.00.xxx (до 74.00.324)</td>
+            <td><span class="tag warn">Разблокировка</span></td>
+            <td>Специальный способ через MP3 + BT + USB-клавиатуру + скрипты; менять -eq 70 → -eq 74</td>
+          </tr>
+          <tr>
+            <td>74.00.331 и выше</td>
+            <td><span class="tag bad">Осторожно</span></td>
+            <td>Сообщения о проблемах с wireless CarPlay после AIO</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Не используйте AIO на очень старых прошивках (v30/v31/v33)</strong> — риск bootloop на логотипе Mazda.</p>
+    </section>
+
+    <section id="tools">
+      <h2>3. Основные инструменты</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3 style="margin-top:0">MZD-AIO-TI</h3>
+          <p>Главный комбайн. Версия ~2.8.6 (Windows / macOS / Linux).</p>
+          <p>Сайт: <a href="https://mazdatweaks.com/" target="_blank" rel="noopener">mazdatweaks.com</a><br>
+          GitHub: <a href="https://github.com/Trevelopment/MZD-AIO" target="_blank" rel="noopener">Trevelopment/MZD-AIO</a></p>
+          <p>Перед запуском на части систем рекомендуют отключать интернет.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Что нужно дополнительно</h3>
+          <ul>
+            <li>USB-флешка FAT32 (лучше ≤ 32 ГБ, без лишних файлов)</li>
+            <li>Для 70+/74: USB-клавиатура, иногда Bluetooth-телефон/ноутбук</li>
+            <li>Для serial-методов: USB-UART адаптер + пины</li>
+            <li>Бэкап настроек и понимание, как делать hard-reboot (NAV + MUTE и т.п.)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="fw">
+      <h2>4. Обновление прошивки</h2>
+      <p>Популярные целевые версии:</p>
+      <ul>
+        <li><strong>56.xx / 59.xx</strong> — стабильно, твики ставятся относительно просто</li>
+        <li><strong>70.00.100</strong> — часто выбирают как базу под твики + подготовку к AA/CP</li>
+        <li><strong>74.00.311 / 74.00.324</strong> — актуальные «финальные» ветки; 324 — распространённый выбор для твиков на 74</li>
+      </ul>
+      <div class="card">
+        <strong>Общий порядок обновления (упрощённо):</strong>
+        <ol>
+          <li>Узнать текущую версию: Настройки → Система → Информация о версии / System Update</li>
+          <li>При очень старой FW (≤ 29–30) — поэтапно (например 31 → 56/59 → 70/74)</li>
+          <li>Скачать прошивку нужного региона (EU / NA и т.д.)</li>
+          <li>Флешка FAT32, файлы прошивки в корень</li>
+          <li>Зажигание ACC или двигатель заведён (по инструкции), вставить флешку, запустить обновление</li>
+          <li>Не выключать питание 30–50+ минут</li>
+        </ol>
+      </div>
+      <p>После обновления на 59.00.502+ / 70+ / 74 штатный autorun с USB часто заблокирован — нужна разблокировка (см. ниже).</p>
+    </section>
+
+    <section id="install">
+      <h2>5. Установка твиков — общий порядок</h2>
+      <ol>
+        <li>Скачать и установить <strong>MZD-AIO-TI</strong>.</li>
+        <li>Отформатировать флешку в <strong>FAT32</strong>.</li>
+        <li>В программе отметить нужные твики (зелёные галочки — установка, красные — удаление).</li>
+        <li>Рекомендуется сначала поставить <strong>Backup JCI Folder</strong> и при необходимости <strong>Install SSH_bringback</strong> / recovery-скрипты.</li>
+        <li>Нажать <strong>Start Compilation</strong> → записать на флешку (или скопировать папку «copy to usb»).</li>
+        <li>В машине: только эта флешка, зажигание ACC / старт, дождаться окна MZD-AIO-TI, подтвердить установку.</li>
+        <li>После завершения — перезагрузка ГУ (часто NAV + MUTE или через меню).</li>
+      </ol>
+      <p>На старых прошивках (до блокировки autorun) этого достаточно. На 70/74 — сначала разблокировка.</p>
+    </section>
+
+    <section id="fw70">
+      <h2>6. Особенности прошивок 70.xx</h2>
+      <ul>
+        <li>Для сохранения возможности ставить твики с USB часто ставят <strong>ID7 Recovery Scripts Pack</strong> / Autorun & Recovery <strong>до</strong> или в процессе обновления на 70.00.100.</li>
+        <li>Альтернатива — serial-подключение (USB-UART) и ручные команды копирования autorun.</li>
+        <li>На 70+ штатный AA/CP через оригинальный USB-хаб работает лучше, чем на 59.</li>
+        <li>Экспериментальный Android Auto Headunit из AIO на 70+ может быть нестабилен.</li>
+      </ul>
+    </section>
+
+    <section id="fw74">
+      <h2>7. Разблокировка и установка твиков на FW 74</h2>
+      <p>На 74.xx (особенно 74.00.311 / 74.00.324) сообщество использует способ с диагностическим меню через специальный MP3 + Bluetooth + USB-клавиатуру.</p>
+      <div class="card">
+        <h3 style="margin-top:0">Краткий алгоритм (по отчётам с Drive2 и форумов)</h3>
+        <ol>
+          <li>Подготовить файлы разблокировки (папка XX_74 / 74.sh и т.п. — из проверенных архивов сообщества / GitHub mzd-evo и аналогов).</li>
+          <li>Флешка с этими файлами + USB-клавиатура.</li>
+          <li>Через Bluetooth воспроизвести специальный MP3 (или аналог) → попасть в Test/Diagnostic screen.</li>
+          <li>Ввести нужные коды (часто 11 и далее по инструкции), открыть терминал.</li>
+          <li>Выполнить команды вида <code>ls</code>, переход в каталог флешки, <code>sh 74.sh</code>.</li>
+          <li>После успешной разблокировки — собрать твики в AIO, <strong>в файле tweaks.sh / run.sh заменить <code>-eq 70</code> на <code>-eq 74</code></strong>.</li>
+          <li>Установить пакет твиков с флешки обычным способом (или вручную <code>sh run.sh</code> / <code>sh tweaks.sh</code>).</li>
+        </ol>
+      </div>
+      <div class="card warn">
+        <strong>Предупреждения по 74:</strong>
+        <ul>
+          <li>На 74.00.331 и новее после AIO бывают жалобы на отключение wireless CarPlay.</li>
+          <li>Рекомендуют держаться 74.00.324 и ниже для твиков.</li>
+          <li>После разблокировки иногда «отваливается» шайба — помогает hard reboot (Music + Navi + Mute и т.п.).</li>
+          <li>Всегда делайте бэкап и не ставьте сразу десятки твиков.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="tweaks">
+      <h2>8. Каталог популярных твиков</h2>
+      <p>Список основан на описаниях MZD-AIO-TI и отчётах владельцев.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Твик</th>
+            <th>Что делает</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Touchscreen While Moving</strong></td>
+            <td>Включает сенсорный экран во время движения</td>
+          </tr>
+          <tr>
+            <td><strong>No More Disclaimer</strong></td>
+            <td>Убирает или сильно сокращает предупреждение при запуске</td>
+          </tr>
+          <tr>
+            <td><strong>Reverse Camera Safety Warning</strong></td>
+            <td>Убирает надпись предупреждения на камере заднего вида</td>
+          </tr>
+          <tr>
+            <td><strong>Background Image / Rotator</strong></td>
+            <td>Свой фон главного экрана (в т.ч. ротация картинок)</td>
+          </tr>
+          <tr>
+            <td><strong>Custom Infotainment Colors / Text Colors</strong></td>
+            <td>Цветовые схемы и цвета текста</td>
+          </tr>
+          <tr>
+            <td><strong>Main Menu Tweaks / Loop</strong></td>
+            <td>Изменение раскладки и циклическая прокрутка главного меню</td>
+          </tr>
+          <tr>
+            <td><strong>Shorter Delay Mod</strong></td>
+            <td>Уменьшает задержку при листании списков</td>
+          </tr>
+          <tr>
+            <td><strong>Statusbar Tweaks / Date in Statusbar</strong></td>
+            <td>Дата и доп. информация в статусбаре, цвета</td>
+          </tr>
+          <tr>
+            <td><strong>Bigger Album Art / Change Blank Album Art</strong></td>
+            <td>Крупнее обложки, замена пустой рамки</td>
+          </tr>
+          <tr>
+            <td><strong>Speedometer</strong></td>
+            <td>Цифровой спидометр + доп. данные (температура, пробег, GPS-скорость и др.)</td>
+          </tr>
+          <tr>
+            <td><strong>Videoplayer</strong></td>
+            <td>Просмотр видео с USB</td>
+          </tr>
+          <tr>
+            <td><strong>Swapfile</strong></td>
+            <td>Доп. «память» с USB для более стабильного видео</td>
+          </tr>
+          <tr>
+            <td><strong>Fuel Consumption Tweak</strong></td>
+            <td>Доп. отображение расхода</td>
+          </tr>
+          <tr>
+            <td><strong>Install SSH_bringback</strong></td>
+            <td>Возвращает/включает SSH (важно на 56.00.511–59.xx)</td>
+          </tr>
+          <tr>
+            <td><strong>Android Auto Headunit App</strong></td>
+            <td>Экспериментальный AA через приложение (не путать с заводским/OEM-модулем)</td>
+          </tr>
+          <tr>
+            <td><strong>Castscreen-receiver</strong></td>
+            <td>Зеркалирование экрана Android</td>
+          </tr>
+          <tr>
+            <td><strong>1 Sec Diag Menu</strong></td>
+            <td>Быстрый вход в диагностическое меню</td>
+          </tr>
+          <tr>
+            <td><strong>Order of Audio Sources</strong></td>
+            <td>Порядок источников звука</td>
+          </tr>
+          <tr>
+            <td><strong>No More Beeps / Pause on Mute</strong></td>
+            <td>Отключение части звуков / пауза при mute</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Часть твиков на 74 может работать нестабильно или не работать — сверяйтесь с актуальными отчётами на форумах (mazda3revolution, Drive2).</p>
+    </section>
+
+    <section id="aa">
+      <h2>9. Android Auto и Apple CarPlay</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3 style="margin-top:0">Заводской / ретрофит путь</h3>
+          <ul>
+            <li>Нужна прошивка обычно от <strong>70+</strong></li>
+            <li>Замена USB-хаба и кабелей на совместимый комплект (оригинал или качественный аналог с Ali/Exist)</li>
+            <li>После этого появляется штатная поддержка AA/CP (проводная, на части машин — беспроводная)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Сообщество (OEM-AA-mod и др.)</h3>
+          <ul>
+            <li>Моды вроде <strong>oem-aa-mod</strong> улучшают AA на 74 (тач, DPI, multitouch и т.д.)</li>
+            <li>Есть проекты вывода подсказок навигации на HUD</li>
+            <li>Экспериментальный AA из AIO — отдельная история, часто менее стабильная</li>
+          </ul>
+        </div>
+      </div>
+      <p>Рекомендация многих владельцев: для ежедневного AA/CP — ретрофит-хаб + актуальная 70/74 прошивка; твики — поверх для удобства интерфейса.</p>
+    </section>
+
+    <section id="risks">
+      <h2>10. Риски, бэкапы и восстановление</h2>
+      <div class="card danger">
+        <ul>
+          <li><strong>Кирпич / bootloop</strong> — при неправильной прошивке, отключении питания, несовместимых твиках.</li>
+          <li><strong>Потеря wireless CarPlay</strong> — особенно на части сборок 74.00.331+ после AIO.</li>
+          <li><strong>Гарантия</strong> — дилер может отказать в ремонте ГУ.</li>
+          <li><strong>Нестабильность</strong> — лишние приложения (видео, AA-твик) повышают нагрузку на CMU.</li>
+        </ul>
+      </div>
+      <h3>Что делать для безопасности</h3>
+      <ul>
+        <li>Всегда ставьте <strong>Backup JCI</strong> / делайте резервные копии перед экспериментами.</li>
+        <li>Ставьте твики порциями, а не всё сразу.</li>
+        <li>Имейте под рукой способ hard reboot и, по возможности, serial-доступ.</li>
+        <li>При «кирпиче» иногда помогает перепрошивка через fail-safe, CH341A-программатор чипа или услуги специалистов (описания есть на Drive2 и mikele85-подобных ресурсах).</li>
+        <li>Не снимайте твики «сбросом к заводским» без предварительного удаления через AIO — можно усугубить.</li>
+      </ul>
+    </section>
+
+    <section id="links">
+      <h2>11. Полезные ссылки</h2>
+      <ul>
+        <li><a href="https://mazdatweaks.com/" target="_blank" rel="noopener">mazdatweaks.com</a> — официальный сайт AIO, FAQ, changelog</li>
+        <li><a href="https://github.com/Trevelopment/MZD-AIO" target="_blank" rel="noopener">GitHub Trevelopment/MZD-AIO</a></li>
+        <li><a href="https://www.mazda3revolution.com/" target="_blank" rel="noopener">Mazda3Revolution</a> — англоязычные треды по FW 74 и AIO</li>
+        <li>Drive2 — множество отчётов владельцев Mazda 3/6/CX-5 с пошаговыми фото (поиск: «твики 74», «MZD-AIO», «прошивка ГУ»)</li>
+        <li>GitHub-проекты сообщества: oem-aa-mod, mzd-connect-1-root, mazda-carplay-hud и аналоги</li>
+      </ul>
+      <div class="card success">
+        <strong>Как пользоваться этой страницей на GitHub Pages</strong>
+        <ol>
+          <li>Создайте репозиторий (например <code>mazda-mzd-tweaks</code>)</li>
+          <li>Загрузите этот файл как <code>index.html</code> в корень (или в ветку <code>gh-pages</code>)</li>
+          <li>В Settings → Pages выберите источник</li>
+          <li>Страница будет доступна по адресу <code>https://&lt;username&gt;.github.io/&lt;repo&gt;/</code></li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Собрано из открытых отчётов сообщества (Drive2, mazdatweaks, Mazda3Revolution, GitHub) на 2024–2026 гг.</p>
+      <p>Не является официальной инструкцией Mazda. Все модификации — на ваш страх и риск.</p>
+      <p style="margin-top:0.8rem;opacity:0.7">Страница подготовлена для выгрузки на GitHub Pages · одностраничный HTML</p>
+    </footer>
+  </main>
+</body>
+</html>
